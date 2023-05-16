@@ -35,7 +35,7 @@
 							</header>
 							<p style="text-align: left;">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
 							<p style="text-align: left;">Here are the steps tackled in the next sections:</p>
-							<ul style="list-style-type:none; margin-top:-30px;" class="row aln-left">
+							<ul style="list-style-type:none; line-break: auto; margin-top:-30px;" class="row aln-left">
 							  <li>📌Preprocessing</li>
 							  <li>📌Natural Language Processing</li>
 							  <li>📌Time Series Analysis</li>
@@ -54,11 +54,11 @@
 					</header>
 					<div class="row aln-left" style="text-align: left;">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the columns were stripped.  
+                            The first thing we did after loading the dataset is to <strong>deal with the null/missing values</strong>; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the columns were stripped.  
                         </div>
 						<!--insert code block here-->
                         <div>
-                            To ensure format consistency, we had to convert each row in the ‘Date posted’ column to datetime format. We did this by making a function that manually converts the values to the right format then using to_datetime. The formatted values are stored in the 'Date posted (formatted)' column.                                                   
+                            To ensure <strong>format consistency</strong>, we had to convert each row in the ‘Date posted’ column to datetime format. We did this by making a function that manually converts the values to the right format then using to_datetime. The formatted values are stored in the 'Date posted (formatted)' column.                                                   
                         </div>
 						<!--insert code block here-->
                         <div>
@@ -66,7 +66,7 @@
                         </div>
 						<!--insert code block here-->
 						<div">
-							After formatting, we handled the outliers.[] 
+							After formatting, we handled the <strong>outliers</strong>.[] 
 						</div>
 						<!--insert code block here-->
                         <div>
@@ -89,22 +89,22 @@
 					</header>
 					<div class="row aln-left" style="text-align: left;">
                         <div>
-                            The first task is removing the emojis and emoticons in the 'Tweet' column. This is done by storing emojis and emoticons in their respective database then using functions to take in the string and replace occurences of emojis/emoticons with their textual descriptions. The function finds all occurrences of emojis/emoticons in the text and then replaces them with the corresponding textual description by looking up the emoji/emoticon in the appropriate dataframe.  
+                            The first task is <strong>removing the emojis and emoticons</strong> in the 'Tweet' column. This is done by storing emojis and emoticons in their respective database then using functions to take in the string and replace occurences of emojis/emoticons with their textual descriptions. The function finds all occurrences of emojis/emoticons in the text and then replaces them with the corresponding textual description by looking up the emoji/emoticon in the appropriate dataframe.  
                         </div>
 						<!--insert code block here-->
 						<div>
-							The text in the 'Tweet' column is converted to lowercase using .str.lower. Punctuations are also removed by using .str.translate(str.maketrans('', '', string.punctuation)). Converted strings are stored in the 'Text' column.   
+							The text in the 'Tweet' column is <strong>converted to lowercase</strong> using .str.lower. Punctuations are also removed by using .str.translate(str.maketrans('', '', string.punctuation)). Converted strings are stored in the 'Text' column.   
 						</div>
 						<div> 
-							Tokenizing the string in the 'Tweet' column is done by using .word_tokenize from the nltk library. This is to basically divide the string into elements or <em>tokens</em>. Tokenized strings are stored in the 'Tokens' column.
+							<strong>Tokenizing</strong> the string in the 'Tweet' column is done by using .word_tokenize from the nltk library. This is to basically divide the string into elements or <em>tokens</em>. Tokenized strings are stored in the 'Tokens' column.
 						</div>
 						<!--insert code block here-->
 						<div>
-							After tokenizing, we removed stopwords using stopwords from nltk.corpus. We did this by making a function and only retaining tokens that are not in the collection of stopwords.     	
+							After tokenizing, we <strong>removed stopwords</strong> using stopwords from nltk.corpus. We did this by making a function and only retaining tokens that are not in the collection of stopwords.     	
 						</div>
 						<!--insert code block here-->
 						<div> 
-							Lastly, for stemming and lemmatization,
+							Lastly, <strong>stemming and lemmatization</strong>. We used PorterStemmer() and WordNetLemmatizer() from nltk.stem for this task, then stored the values in the 'Stemmed' and 'Lemmatized' columns. 
 						</div>
 					</div>
 				</div>
