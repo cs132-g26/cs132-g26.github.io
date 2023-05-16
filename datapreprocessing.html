@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/prism.css" />
 	</head>
 	<body class="is-preload">
 
@@ -56,6 +57,23 @@
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
                             The first thing we did after loading the dataset is to <strong>deal with the null/missing values</strong>; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the columns were stripped.  
                         </div>
+						<code class="language-python">
+							import pandas as pd
+							import matplotlib.pyplot as plt
+							import matplotlib.dates as mdates
+
+							# Read the combined csv file of the two datasheets
+							df = pd.read_csv('dataset.csv')
+
+							# Removing all rows that do not have content (those with ID starting 0)
+							df = df.dropna(subset=['Timestamp'])
+
+							# Resetting the index to match the number of rows
+							df.reset_index(drop=True, inplace=True)
+
+							# Remove trailing whitespace in all columns
+							df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+						</code>
 						<!--insert code block here-->
                         <div>
                             To ensure <strong>format consistency</strong>, we had to convert each row in the ‘Date posted’ column to datetime format. We did this by making a function that manually converts the values to the right format then using to_datetime. The formatted values are stored in the 'Date posted (formatted)' column.                                                   
@@ -201,6 +219,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/prism.js"></script>
 
 	</body>
 </html>
