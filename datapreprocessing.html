@@ -33,12 +33,12 @@
 							<header>
 								<h1>This is the <strong>preprocessing</strong> step.</h1>
 							</header>
-							<p class="row aln-left">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
-							<p class="row aln-left">Here are the steps tackled in the next sections:</p>
-							<ul style="list-style-type:none; margin-top:-30px;">
-							  <li class="row aln-left">📌Preprocessing</li>
-							  <li class="row aln-left">📌Natural Language Processing</li>
-							  <li class="row aln-left">📌Time Series Analysis</li>
+							<p style="text-align: left;">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
+							<p style="text-align: left;">Here are the steps tackled in the next sections:</p>
+							<ul style="list-style-type:none; margin-top:-30px;" class="row aln-left">
+							  <li>📌Preprocessing</li>
+							  <li>📌Natural Language Processing</li>
+							  <li>📌Time Series Analysis</li>
 							</ul>
 						</div>
 					</div>
@@ -52,28 +52,28 @@
 						<h2>Let's talk about our data science methodology.</h2>
 						<p>These are the steps we took to preprocess our dataset for data exploration, in this section we will explain how we handled missing values and outliers, how we ensured format consistency in the columns, how we normalized the data, and how we did categorical data encoding.</p>
 					</header>
-					<div class="row aln-left">
-						<div class="row aln-left"> <!--class="col-6 col-6-medium col-12-small"-->
+					<div class="row aln-left" style="text-align: left;">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
                             The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the columns were stripped.  
                         </div>
 						<!--insert code block here-->
-                        <div class="row aln-left">
+                        <div>
                             To ensure format consistency, we had to convert each row in the ‘Date posted’ column to datetime format. We did this by making a function that manually converts the values to the right format then using to_datetime. The formatted values are stored in the 'Date posted (formatted)' column.                                                   
                         </div>
 						<!--insert code block here-->
-                        <div class="row aln-left">
+                        <div>
 							The 'Date joined' column was also converted to ensure format consistency. Formatted values are then stored in the 'Date joined (formatted)' column.  
                         </div>
 						<!--insert code block here-->
-						<div class="row aln-left">
+						<div">
 							After formatting, we handled the outliers.[] 
 						</div>
 						<!--insert code block here-->
-                        <div class="row aln-left">
+                        <div>
                             Normalization []
                         </div>
 						<!--insert code block here-->
-                        <div class="row aln-left">
+                        <div>
                             Categorical data encoding []
                         </div>
 						<!--insert code block here-->
@@ -87,23 +87,23 @@
 						<h2>Let's move on to natural language processing.</h2>
 						<p>The following are the tasks we did for NLP:</p>
 					</header>
-					<div class="row aln-left">
+					<div class="row aln-left" style="text-align: left;">
                         <div>
                             The first task is removing the emojis and emoticons in the 'Tweet' column. This is done by storing emojis and emoticons in their respective database then using functions to take in the string and replace occurences of emojis/emoticons with their textual descriptions. The function finds all occurrences of emojis/emoticons in the text and then replaces them with the corresponding textual description by looking up the emoji/emoticon in the appropriate dataframe.  
                         </div>
 						<!--insert code block here-->
-						<div class="row aln-left">
+						<div>
 							The text in the 'Tweet' column is converted to lowercase using .str.lower. Punctuations are also removed by using .str.translate(str.maketrans('', '', string.punctuation)). Converted strings are stored in the 'Text' column.   
 						</div>
-						<div class="row aln-left"> 
+						<div> 
 							Tokenizing the string in the 'Tweet' column is done by using .word_tokenize from the nltk library. This is to basically divide the string into elements or <em>tokens</em>. Tokenized strings are stored in the 'Tokens' column.
 						</div>
 						<!--insert code block here-->
-						<div class="row aln-left">
+						<div>
 							After tokenizing, we removed stopwords using stopwords from nltk.corpus. We did this by making a function and only retaining tokens that are not in the collection of stopwords.     	
 						</div>
 						<!--insert code block here-->
-						<div class="row aln-left"> 
+						<div> 
 							Lastly, for stemming and lemmatization,
 						</div>
 					</div>
@@ -116,8 +116,8 @@
 						<h2>Then we have the time series analysis</h2>
 						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
 					</header>
-					<div class="row aln-left">
-						<div class="row aln-left"> <!--class="col-6 col-6-medium col-12-small"-->
+					<div class="row aln-left" style="text-align: left;">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
                             For the time series analysis,
 						</div>
 					</div>
