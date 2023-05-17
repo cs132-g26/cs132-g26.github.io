@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700");
 @import url("fontawesome-all.min.css");
 
+.language-python{
+	background-color: black;
+}
+
 /*
 	Miniport by HTML5 UP
 	html5up.net | @ajlkn
