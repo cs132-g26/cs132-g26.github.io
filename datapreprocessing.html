@@ -196,15 +196,8 @@
 								# Apply to Following
 								upper_array, lower_array = outliers(test_df['Followers'])
 
-								print('upper bound:\n', test_df.loc[upper_array, 'Followers'])
-								print('lower bound:\n', test_df.loc[lower_array, 'Followers'])
-
 								# Apply to Followers
 								upper_array, lower_array = outliers(test_df['Following'])
-
-								print('upper bound:\n', test_df.loc[upper_array, 'Following'])
-								print('lower bound:\n', test_df.loc[lower_array, 'Following'])
-							</code>
 						</pre>
                         <div>
                             <p>As preparation for Machine Learning modeling, we <strong> normalized the data.</strong> We used the z-score to normalize the data in the 'Following' and 'Followers' column.
@@ -217,8 +210,6 @@
 
 								df['Following (normalized)'] = (df['Following'] - df['Following'].mean()) / df['Following'].std()
 								df['Followers (normalized)'] = (df['Followers'] - df['Followers'].mean()) / df['Followers'].std()
-								print(df['Following (normalized)'])
-								print(df['Followers (normalized)'])
 							</code>
 						</pre>
                         <div>
@@ -236,8 +227,6 @@
 									return 1 #known
 								
 								df['Account type (categorized)'] = df['Account type'].apply(lambda x: categorize(x))
-								test_df['Account type (categorized)'] = test_df['Account type'].apply(lambda x: categorize(x))
-								print(test_df['Account type (categorized)'])
 							</code>
 						</pre>
 					</div>
