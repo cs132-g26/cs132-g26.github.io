@@ -167,64 +167,58 @@
 						</pre>
 
 						<div>
-							<p>We also found out that there were outliers in the 'Followers' and 'Following' column using the Interquartile Range (IQR). As to avoid disrupting the original data, we copied the contents into test_df and explored the outliers there.
+							<p>We also found out that there were outliers in the 'Followers' and 'Following' column using the Interquartile Range (IQR).
+								As to avoid disrupting the original data, we copied the contents into test_df and explored the outliers there using the function below.
 								We decided not to remove these outliers since the huge gap was essential in analyzing the other features.</p>
 						</div>
 
 						<pre>
 							<code class="language-python">
-								# Handle outliers for followers (dapat after formatting ito)
+								# Handle outliers using Interquartile Range
 								import numpy as np
-								
+
 								test_df = df.copy()
-								# IQR for Followers
-								# Calculate the upper and lower limits
-								Q1 = test_df['Followers'].quantile(0.25)
-								Q3 = test_df['Followers'].quantile(0.75)
-								IQR = Q3 - Q1
-								lower = Q1 - 1.5*IQR
-								upper = Q3 + 1.5*IQR
-								 
-								# Create arrays of Boolean values indicating the outlier rows
-								upper_array = np.where(test_df['Followers']>=upper)[0]
-								lower_array = np.where(test_df['Followers']<=lower)[0]
+								# IQR
+								def outliers(col):
+									# Calculate the upper and lower limits
+									Q1 = col.quantile(0.25)
+									Q3 = col.quantile(0.75)
+									IQR = Q3 - Q1
+									lower = Q1 - 1.5*IQR
+									upper = Q3 + 1.5*IQR
 								
+									# Create arrays of Boolean values indicating the outlier rows
+									upper_array = np.where(col>=upper)[0]
+									lower_array = np.where(col<=lower)[0]
+
+									return upper_array, lower_array
+
+								# Apply to Following
+								upper_array, lower_array = outliers(test_df['Followers'])
+
 								print('upper bound:\n', test_df.loc[upper_array, 'Followers'])
 								print('lower bound:\n', test_df.loc[lower_array, 'Followers'])
-								
-								# IQR for Following
-								# Calculate the upper and lower limits
-								Q1 = test_df['Following'].quantile(0.25)
-								Q3 = test_df['Following'].quantile(0.75)
-								IQR = Q3 - Q1
-								lower = Q1 - 1.5*IQR
-								upper = Q3 + 1.5*IQR
-								 
-								# Create arrays of Boolean values indicating the outlier rows
-								upper_array = np.where(test_df['Following']>=upper)[0]
-								lower_array = np.where(test_df['Following']<=lower)[0]
-								
+
+								# Apply to Followers
+								upper_array, lower_array = outliers(test_df['Following'])
+
 								print('upper bound:\n', test_df.loc[upper_array, 'Following'])
 								print('lower bound:\n', test_df.loc[lower_array, 'Following'])
-								
 							</code>
-						</pre>						
-                        <!-- <div>
-                            Normalization []
-                        </div> -->
+						</pre>
+                        <div>
+                            <p>As preparation for Machine Learning modeling, we <strong> normalized the data.</strong> We used the z-score to normalize the data in the 'Following' and 'Followers' column.
+								The z-score is given by the formula (x-mean)/stdev.
+								Since the data would be helpful later on, we put the results in the 'Following (normalized)' and 'Followers (normalized)' columns.</p>
+                        </div>
 						<pre>
 							<code class="language-python">
-								# Normalization/standardization/scaling FOR FOLLOWING AND FOLLOWERS
+								# Normalization/standardization/scaling for following and followers
 
 								df['Following (normalized)'] = (df['Following'] - df['Following'].mean()) / df['Following'].std()
 								df['Followers (normalized)'] = (df['Followers'] - df['Followers'].mean()) / df['Followers'].std()
-								#print(df['Following (normalized)'])
-								#print(df['Followers (normalized)'])
-								
-								test_df['Following (normalized)'] = (test_df['Following'] - test_df['Following'].mean()) / test_df['Following'].std()
-								test_df['Followers (normalized)'] = (test_df['Followers'] - test_df['Followers'].mean()) / test_df['Followers'].std()
-								print(test_df['Following (normalized)'])
-								print(test_df['Followers (normalized)'])
+								print(df['Following (normalized)'])
+								print(df['Followers (normalized)'])
 							</code>
 						</pre>
                         <div>
