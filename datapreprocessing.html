@@ -55,7 +55,8 @@
 					</header>
 					<div class="row aln-left" style="text-align: left;">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            The first thing we did after loading the dataset is to <strong>deal with the null/missing values</strong>; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the columns were stripped.  
+                            <p>The first thing we did after loading the dataset is to <strong>deal with the null/missing values</strong>; we did this by using dropna to remove all the empty rows. We depicted empty rows as the rows with empty ‘Timestamp’ column. Since the Timestamp marks the collection of a tweet, if there is no value in the Timestamp column, that means that there is no tweet collected in that row.</p>
+							<p>We also removed the optional columns that would not be necessary for our study. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. Lastly, all trailing whitespace in the all the column values were stripped.</p>
                         </div>
 						<pre>
 						<code class="language-python">
@@ -69,6 +70,10 @@
 							# Removing all rows that do not have content (those with ID starting 0)
 							df = df.dropna(subset=['Timestamp'])
 
+							# Removing optional columns
+							df = df.drop(['Tweet Translated', 'Screenshot', 'Quote Tweets', 'Views', 'Rating', 'Remarks', 'Reviewer', 'Review'], axis=1
+
+
 							# Resetting the index to match the number of rows
 							df.reset_index(drop=True, inplace=True)
 
@@ -76,9 +81,13 @@
 							df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 						</code>
 						</pre>
+
                         <div>
-                            To ensure <strong>format consistency</strong>, we had to convert each row in the ‘Date posted’ column to datetime format. We did this by making a function that manually converts the values to the right format then using to_datetime. The formatted values are stored in the 'Date posted (formatted)' column.                                                   
+                            <p>To <strong>ensure format consistency</strong>, we had to convert each data type into the proper format (let alone for string data since we will be using NLP to format them).</p>
+							<p>For <i>dates</i>, we had to convert each row in the 'Date posted' and 'Joined' column to datetime format. We did this by making a function that manually converts the values to the right format.</p>
+							<p>The formatted values for the 'Date posted' column are stored in the 'Date posted (formatted)' column.</p>                                                
                         </div>
+
 						<pre>
 							<code class="language-python">
 								# Convert each row in the date posted column to datetime format.
@@ -104,12 +113,11 @@
 							</code>
 						</pre>
                         <div>
-							The 'Date joined' column was also converted to ensure format consistency. Formatted values are then stored in the 'Date joined (formatted)' column.  
+							<p>Likewise, the formatted values for the 'Joined' column are then stored in the 'Date joined (formatted)' column.</p>
                         </div>
 						<pre>
 							<code class="language-python">
-								# Convert each row in the date posted column to datetime format.
-								# NOTE: An entry in the dataset has the value set to 915 instead of 09/15 (it was fixed manually)
+								# Convert each row in the joined column to datetime format.
 								def convert(x):
 									date = x.split("/")
 									if (len(date[0])<2):
@@ -120,11 +128,12 @@
 									return fdate
 								
 								df['Date joined (formatted)'] = df['Joined'].apply(lambda x: convert(x))
-							</code>	
+							</code>
 						</pre>
                         <div>
-							The columns for number of likes, replies, retweets, followers, and following were also converted to ensure format consistency. Values that are not float type are converted to float type.  
-                        </div>	
+							<p>For <i>numbers</i>, we had to ensure that all they were in float data type. We did this by making a function that checks if the data is in float format and converts it if not
+								From exploring the data, we were able to find out that some numerical data in the thousands were written with K instead of the actual number. To retain the float format, we had to convert it.</p>
+                        </div>
 						<pre>
 							<code class="language-python">
 								def convert(x):
@@ -137,15 +146,16 @@
 								  x = float(x)
 								return x
 							  
-							  df.loc['Likes'] = df['Likes'].apply(lambda x: convert(x))
-							  df.loc['Replies'] = df['Replies'].apply(lambda x: convert(x))
-							  df.loc['Retweets'] = df['Retweets'].apply(lambda x: convert(x))
-							  df.loc['Followers'] = df['Followers'].apply(lambda x: convert(x))
-							  df.loc['Following'] = df['Following'].apply(lambda x: convert(x))								
+							  df['Likes'] = df['Likes'].apply(lambda x: convert(x))
+							  df['Replies'] = df['Replies'].apply(lambda x: convert(x))
+							  df['Retweets'] = df['Retweets'].apply(lambda x: convert(x))
+							  df['Followers'] = df['Followers'].apply(lambda x: convert(x))
+							  df['Following'] = df['Following'].apply(lambda x: convert(x))								
 							</code>
 						</pre>					
 						<div>
-							After formatting, we handled the <strong>outliers</strong>.[] 
+							<p>After formatting, we <strong>handled the outliers</strong> that would throw off the results of our data. </p>
+							<p>Since the scope of our data should only span from 2016 to 2022, we considered the data out of scope as outliers and removed them from the dataset.</p>>
 						</div>
 						<pre>
 							<code class="language-python">
