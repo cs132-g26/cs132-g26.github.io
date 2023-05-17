@@ -71,7 +71,7 @@
 							df = df.dropna(subset=['Timestamp'])
 
 							# Removing optional columns
-							df = df.drop(['Tweet Translated', 'Screenshot', 'Quote Tweets', 'Views', 'Rating', 'Remarks', 'Reviewer', 'Review'], axis=1
+							df = df.drop(['Tweet Translated', 'Screenshot', 'Quote Tweets', 'Views', 'Rating', 'Remarks', 'Reviewer', 'Review'], axis=1)
 
 
 							# Resetting the index to match the number of rows
@@ -160,7 +160,8 @@
 						<pre>
 							<code class="language-python">
 								# Handle outliers for out of scope date
-								df = df.loc[(df['Date posted (formatted)'] >= '2015-01-01') & (df['Date posted (formatted)'] < '2023-01-01')]
+								df = df.loc[(df['Date posted (formatted)'] >= '2015-01-01') 
+									& (df['Date posted (formatted)'] < '2023-01-01')]
 								df.reset_index(drop=True, inplace=True)
 					
 							</code>
@@ -198,6 +199,7 @@
 
 								# Apply to Followers
 								upper_array, lower_array = outliers(test_df['Following'])
+							</code>
 						</pre>
                         <div>
                             <p>As preparation for Machine Learning modeling, we <strong> normalized the data.</strong> We used the z-score to normalize the data in the 'Following' and 'Followers' column.
@@ -347,15 +349,56 @@
 					</header>
 					<div class="row aln-left" style="text-align: left;">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            For the time series analysis,
-						</div>
+							<strong>Binning</strong><br>
+                            For the time series analysis, we decided to bin the data we obtained by month and by year. This is done to help us get a general idea by
+							looking at the yearly frequency distribution of the tweets that we were able to sample. In order to get a deeper understanding of the
+							frequency of the tweets, we also binned them by month to be able to see which dates in particular have the highest spikes in misinformation/disinformation tweets.
+						
+							<br>
+
+							The way that the data was binned is shown in the following code.
+
 						<pre>
 							<code class="language-python">
+								# Binning
+								# Bin by month and year
+								df['Date posted (year-month)'] = pd.to_datetime(df['Date posted (formatted)']).dt.to_period('M')
+								df['Date posted(year)'] =  pd.to_datetime(df['Date posted (formatted)']).dt.to_period('Y')
 
+								monthly_frequency = df['Date posted (year-month)'].value_counts().sort_index()
+								yearly_frequency  = df['Date posted(year)'].value_counts().sort_index()
 							</code>
 						</pre>
 
+							The contents of the 'Date posted (formatted)' column of the df dataframe were converted to datetime via the pandas to_datetime method, and 
+							were then converted into a pd.Period object that has a frequency of both M and Y. We then count the number of times a certain month or year has occurred
+							within our dataset and then we sort it to get our monthly_frequency and yearly_frequency.
+						</div>
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							<strong>Interpolation</strong><br>
+                            For the Interpolation, we decided to account for the missing dates that we obtained by imputing 0 to all the dates that we couldn't find a sample misinformation or disinformation 
+							tweet on. The way this was done is via the following.
+						
+							<pre>
+								<code class="language-python">
+									# Interpolation
+
+									# Impute missing dates (important for line graph).
+									# Hardcoded minimum date and maximum date
+									min_date = pd.Period('2016-01', freq='M')
+									max_date = pd.Period('2022-12', freq='M')
+									
+									all_months = pd.period_range(start = min_date, end = max_date, freq='M')
+									monthly_frequency = monthly_frequency.reindex(all_months, fill_value = 0)									
+								</code>
+							</pre>
+
+							pd.Period objects symbolizing the range of dates that our dataset account for were declared in the code. Then, we created a period object that has
+							all the dates in the given range. We then reindex the already declared monthly_frequency pd.Series object.
+	
+						</div>
 					</div>
+					<hr>
 					<footer>
 						<p>Want to learn more? Take a look at our source codes.</p>
 						<a href="https://github.com/cs132-g26/cs132-g26.github.io.git" class="button large scrolly">Github Repo</a>
