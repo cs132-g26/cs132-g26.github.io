@@ -228,7 +228,7 @@
 							</code>
 						</pre>
                         <div>
-                            <p>Since we have categorical data that will be compared to numerical data, we had to use <strong> categorical data encoding</strong>.</p>
+                            <p>Since we have categorical data that will be compared to numerical data, we had to use <strong>categorical data encoding</strong>.</p>
 							<p>For the Account type, we have three categories: Identified, Media, and Anonymous.
 								In order to label the Account Type, we divide them into 2 types: 1 for known which includes Media and Identified; 0 for unknown which includes Anonymous.</p>
                         </div>
@@ -348,7 +348,10 @@
 								df['Stemmed'] = df['Tokens'].apply(stem_tokens)
 								df['Lemmatized'] = df['Tokens'].apply(lemmatize_tokens)
 							</code>
-						</pre>						
+						</pre>
+						<div> 
+							These steps were all done so that if we decided to also analyze the tweets and their content, we can analyze and process it at a more granular level. The NLP algorithms that may be used can now operate on individual tokens rather than on entire texts. To add, removing stopwords also help in reducing the dimensionality of the data and focus on the more informative words in the text.
+						</div>						
 					</div>
 				</div>
 			</article>			
