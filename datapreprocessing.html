@@ -106,19 +106,135 @@
                         <div>
 							The 'Date joined' column was also converted to ensure format consistency. Formatted values are then stored in the 'Date joined (formatted)' column.  
                         </div>
-						<!--insert code block here-->
-						<div">
+						<pre>
+							<code class="language-python">
+								# Convert each row in the date posted column to datetime format.
+								# NOTE: An entry in the dataset has the value set to 915 instead of 09/15 (it was fixed manually)
+								def convert(x):
+									date = x.split("/")
+									if (len(date[0])<2):
+									date[0] = "0" + date[0]
+									if (len(date[1]) < 4):
+									date[1] = "20" + date[1]
+									fdate = date[1] + "-" + date[0]
+									return fdate
+								
+								df['Date joined (formatted)'] = df['Joined'].apply(lambda x: convert(x))
+							</code>	
+						</pre>
+                        <div>
+							The columns for number of likes, replies, retweets, followers, and following were also converted to ensure format consistency. Values that are not float type are converted to float type.  
+                        </div>	
+						<pre>
+							<code class="language-python">
+								def convert(x):
+								if type(x) is float:
+								  return x
+								elif x.endswith('K'):
+								  x = float(x[:-1])
+								  x = x*1000
+								else:
+								  x = float(x)
+								return x
+							  
+							  df.loc['Likes'] = df['Likes'].apply(lambda x: convert(x))
+							  df.loc['Replies'] = df['Replies'].apply(lambda x: convert(x))
+							  df.loc['Retweets'] = df['Retweets'].apply(lambda x: convert(x))
+							  df.loc['Followers'] = df['Followers'].apply(lambda x: convert(x))
+							  df.loc['Following'] = df['Following'].apply(lambda x: convert(x))								
+							</code>
+						</pre>					
+						<div>
 							After formatting, we handled the <strong>outliers</strong>.[] 
 						</div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# Handle outliers for out of scope date
+								df = df.loc[(df['Date posted (formatted)'] >= '2015-01-01') & (df['Date posted (formatted)'] < '2023-01-01')]
+								df.reset_index(drop=True, inplace=True)
+					
+							</code>
+						</pre>
+						<pre>
+							<code class="language-python">
+								# Handle outliers for followers (dapat after formatting ito)
+								import numpy as np
+								
+								test_df = df.copy()
+								# IQR
+								# Calculate the upper and lower limits
+								Q1 = test_df['Followers'].quantile(0.25)
+								Q3 = test_df['Followers'].quantile(0.75)
+								IQR = Q3 - Q1
+								lower = Q1 - 1.5*IQR
+								upper = Q3 + 1.5*IQR
+								 
+								# Create arrays of Boolean values indicating the outlier rows
+								upper_array = np.where(test_df['Followers']>=upper)[0]
+								lower_array = np.where(test_df['Followers']<=lower)[0]
+								
+								print('upper bound:\n', test_df.loc[upper_array, 'Followers'])
+								print('lower bound:\n', test_df.loc[lower_array, 'Followers'])
+								
+								test_df.drop(index=upper_array, inplace=True)
+								test_df.drop(index=lower_array, inplace=True)
+								test_df.reset_index(drop=True, inplace=True)
+								
+								# Calculate the upper and lower limits
+								Q1 = test_df['Following'].quantile(0.25)
+								Q3 = test_df['Following'].quantile(0.75)
+								IQR = Q3 - Q1
+								lower = Q1 - 1.5*IQR
+								upper = Q3 + 1.5*IQR
+								 
+								# Create arrays of Boolean values indicating the outlier rows
+								upper_array = np.where(test_df['Following']>=upper)[0]
+								lower_array = np.where(test_df['Following']<=lower)[0]
+								
+								print('upper bound:\n', test_df.loc[upper_array, 'Following'])
+								print('lower bound:\n', test_df.loc[lower_array, 'Following'])
+								
+								test_df.drop(index=upper_array, inplace=True)
+								test_df.drop(index=lower_array, inplace=True)
+								test_df.reset_index(drop=True, inplace=True)
+								
+							</code>
+						</pre>						
                         <div>
                             Normalization []
                         </div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# Normalization/standardization/scaling FOR FOLLOWING AND FOLLOWERS
+
+								df['Following (normalized)'] = (df['Following'] - df['Following'].mean()) / df['Following'].std()
+								df['Followers (normalized)'] = (df['Followers'] - df['Followers'].mean()) / df['Followers'].std()
+								#print(df['Following (normalized)'])
+								#print(df['Followers (normalized)'])
+								
+								test_df['Following (normalized)'] = (test_df['Following'] - test_df['Following'].mean()) / test_df['Following'].std()
+								test_df['Followers (normalized)'] = (test_df['Followers'] - test_df['Followers'].mean()) / test_df['Followers'].std()
+								print(test_df['Following (normalized)'])
+								print(test_df['Followers (normalized)'])
+							</code>
+						</pre>
                         <div>
                             Categorical data encoding []
                         </div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# Categorical data encoding for ACCOUNT TYPE
+								def categorize(x):
+								  if x == "Anonymous":
+									return 0 #uknown
+								  elif x == "Media" or x == "Identified":
+									return 1 #known
+								
+								df['Account type (categorized)'] = df['Account type'].apply(lambda x: categorize(x))
+								test_df['Account type (categorized)'] = test_df['Account type'].apply(lambda x: categorize(x))
+								print(test_df['Account type (categorized)'])
+							</code>
+						</pre>
 					</div>
 				</div>
 			</article>
@@ -133,21 +249,95 @@
                         <div>
                             The first task is <strong>removing the emojis and emoticons</strong> in the 'Tweet' column. This is done by storing emojis and emoticons in their respective database then using functions to take in the string and replace occurences of emojis/emoticons with their textual descriptions. The function finds all occurrences of emojis/emoticons in the text and then replaces them with the corresponding textual description by looking up the emoji/emoticon in the appropriate dataframe.  
                         </div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# Handle Emojis 
+								url_emoji = "https://drive.google.com/uc?id=1G1vIkkbqPBYPKHcQ8qy0G2zkoab2Qv4v"
+								df_emoji = pd.read_pickle(url_emoji)
+								df_emoji = {v: k for k, v in df_emoji.items()}
+								
+								def emoji_to_word(text):
+								  for emot in df_emoji:
+									text = re.sub(r'('+emot+')', "_".join(df_emoji[emot].replace(",","").replace(":","").split()), text)
+								  return text
+								
+								# Handle Emoticons 
+								url_emote = "https://drive.google.com/uc?id=1HDpafp97gCl9xZTQWMgP2kKK_NuhENlE"
+								df_emote = pd.read_pickle(url_emote)
+								
+								def emote_to_word(text):
+									for emot in df_emote:
+										text = re.sub(u'('+emot+')', "_".join(df_emote[emot].replace(",","").split()), text)
+										text = text.replace("<3", "heart" ) # not included in emoticons database
+									return text
+								
+								df['Tweet'] = df['Tweet'].apply(lambda x: emoji_to_word(x))
+								df['Tweet'] = df['Tweet'].apply(lambda x: emote_to_word(x))
+							</code>
+						</pre>
+
 						<div>
 							The text in the 'Tweet' column is <strong>converted to lowercase</strong> using .str.lower. Punctuations are also removed by using .str.translate(str.maketrans('', '', string.punctuation)). Converted strings are stored in the 'Text' column.   
 						</div>
+						<pre>
+							<code class="language-python">
+								# convert to lowercase
+								df['Text'] = df['Tweet'].str.lower()
+								
+								# remove punctuation 
+								df['Text'] = df['Text'].str.translate(str.maketrans('', '', string.punctuation)) # di ko alam if gumana toh
+							
+							</code>
+						</pre>
+
 						<div> 
 							<strong>Tokenizing</strong> the string in the 'Tweet' column is done by using .word_tokenize from the nltk library. This is to basically divide the string into elements or <em>tokens</em>. Tokenized strings are stored in the 'Tokens' column.
 						</div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# tokenize 
+								df['Tokens'] = df['Text'].apply(nltk.word_tokenize)
+								
+							</code>
+						</pre>
+
 						<div>
 							After tokenizing, we <strong>removed stopwords</strong> using stopwords from nltk.corpus. We did this by making a function and only retaining tokens that are not in the collection of stopwords.     	
 						</div>
-						<!--insert code block here-->
+						<pre>
+							<code class="language-python">
+								# Removing stop words
+								from nltk.corpus import stopwords
+								
+								def remove_stopwords(tokens):
+									return [token for token in tokens if token.lower() not in stopwords.words('english')]
+								
+								df['Tokens'] = df['Tokens'].apply(remove_stopwords)
+							</code>
+						</pre>
+
 						<div> 
 							Lastly, <strong>stemming and lemmatization</strong>. We used PorterStemmer() and WordNetLemmatizer() from nltk.stem for this task, then stored the values in the 'Stemmed' and 'Lemmatized' columns. 
 						</div>
+						<pre>
+							<code class="language-python">
+								# Stemming and Lemmatization
+								from nltk.stem import PorterStemmer, WordNetLemmatizer
+								
+								stemmer = PorterStemmer()
+								lemmatizer = WordNetLemmatizer()
+								
+								def stem_tokens(tokens):
+									return [stemmer.stem(token) for token in tokens]
+								
+								# define a lemmatizer function
+								def lemmatize_tokens(tokens):
+									return [lemmatizer.lemmatize(token) for token in tokens]
+								
+								df['Stemmed'] = df['Tokens'].apply(stem_tokens)
+								df['Lemmatized'] = df['Tokens'].apply(lemmatize_tokens)
+							</code>
+						</pre>						
 					</div>
 				</div>
 			</article>			
@@ -162,6 +352,12 @@
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
                             For the time series analysis,
 						</div>
+						<pre>
+							<code class="language-python">
+
+							</code>
+						</pre>
+
 					</div>
 					<footer>
 						<p>Want to learn more? Take a look at our source codes.</p>
@@ -244,6 +440,7 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 			<script src="assets/js/prism.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-python.min.js"></script>
 
 	</body>
 </html>
