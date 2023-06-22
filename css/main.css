@@ -1713,7 +1713,7 @@ input, select, textarea {
 		input[type="reset"]:active,
 		button:active,
 		.button:active {
-			background-color: #5d0905;
+			background-color: #750d08;
 			top: 1px;
 		}
 
