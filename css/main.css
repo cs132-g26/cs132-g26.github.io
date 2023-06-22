@@ -1947,6 +1947,8 @@ input, select, textarea {
 /* Icons */
 
 	.icon {
+		
+		color: #DC1307;
 		text-decoration: none;
 		text-decoration: none;
 	}
