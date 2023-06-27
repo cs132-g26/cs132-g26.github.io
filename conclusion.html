@@ -9,7 +9,9 @@
 		<title>PH Twitter Fake News Analysis</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/main.css" />        
+		<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
 	</head>
 	<body class="is-preload">
 
@@ -17,9 +19,8 @@
 			<nav id="nav">
 				<ul class="container">
 					<li><a href="index.html">HOME</a></li>
-					<li><a href="#overview">CONCLUSION</a></li>
-					<li><a href="#feature">IMPLICATIONS</a></li>
-					<li><a href="#results">RESULTS</a></li>
+					<li><a href="#conclusion">CONCLUSION</a></li>
+					<li><a href="#implication">IMPLICATION</a></li>
 					<li><a href="#team">TEAM</a></li>
 				</ul>
 			</nav>
@@ -46,8 +47,23 @@
 
 
 
-			<!-- Conclusions -->
-			<article id="feature" class="wrapper style3">
+			<!-- CONCLUSION -->
+			<article id="conclusion" class="wrapper style3">
+				<div class="container">
+					<header>
+						<h2>Let's talk about our data science methodology.</h2>
+						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
+					</header>
+					<div class="row">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+                            The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. 
+                        </div>
+					</div>
+				</div>
+			</article>
+
+            <!-- IMPLICATION -->
+			<article id="implication" class="wrapper style3">
 				<div class="container">
 					<header>
 						<h2>Let's talk about our data science methodology.</h2>

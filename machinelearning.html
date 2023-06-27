@@ -16,14 +16,16 @@
 	<body class="is-preload">
 
 		<!-- Nav -->
-        <nav id="nav">
-            <ul class="container">
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="#results">RESULTS</a></li>
-                <li><a href="#discussions">DISCUSSIONS</a></li>
-                <li><a href="#team">TEAM</a></li>
-            </ul>
-        </nav>
+			<nav id="nav">
+				<ul class="container">
+					<li><a href="index.html">HOME</a></li>
+					<li><a href="#overview">OVERVIEW</a></li>
+					<li><a href="#feature">FEATURES</a></li>
+					<li><a href="#methods">METHODS</a></li>
+					<li><a href="#results">RESULTS</a></li>
+					<li><a href="#team">TEAM</a></li>
+				</ul>
+			</nav>
 
 			<!-- Top -->
 			<article id="overview" class="wrapper style1">
@@ -47,8 +49,8 @@
 
 
 
-			<!-- RESULTS -->
-			<article id="results" class="wrapper style3">
+			<!-- Methods -->
+			<article id="feature" class="wrapper style3">
 				<div class="container">
 					<header>
 						<h2>Let's talk about our data science methodology.</h2>
@@ -56,26 +58,7 @@
 					</header>
 					<div class="row">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            <p>What did you find out? What are the key takeaways?</p> 
-                            <p>Why should we care about your findings?</p> 
-                            <p>How do your findings fit into what we already know?</p>
-                        </div>
-					</div>
-				</div>
-			</article>
-
-            <!-- DISC -->
-			<article id="discussions" class="wrapper style3">
-				<div class="container">
-					<header>
-						<h2>Let's talk about our data science methodology.</h2>
-						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
-					</header>
-					<div class="row">
-						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            <p>What did you find out? What are the key takeaways?</p> 
-                            <p>Why should we care about your findings?</p> 
-                            <p>How do your findings fit into what we already know?</p>
+                            The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. 
                         </div>
 					</div>
 				</div>
