@@ -31,15 +31,9 @@
 					<div class="row aln-left">
 						<div class="col-12-medium">
 							<header>
-								<h1>This is the <strong>features</strong> section.</h1>
+								<h1>This is the <strong>results</strong> section.</h1>
 							</header>
-							<p style="text-align: left;">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
-							<p style="text-align: left;">Here are the steps tackled in the next sections:</p>
-							<ul style="list-style-type:none; margin-top:-30px; text-align: left;">
-							<li>📌Preprocessing</li>
-							<li>📌Natural Language Processing</li>
-							<li>📌Time Series Analysis</li>
-							</ul>
+							<p style="text-align: left; font-size: larger;">Featured in this page are the significant findings and key takeaways derived from our analysis. We will also discuss the relevance of our results, and how these findings contribute to the existing knowledge on the topic.</p>
 						</div>
 					</div>
 				</div>
@@ -51,14 +45,17 @@
 			<article id="results" class="wrapper style3">
 				<div class="container">
 					<header>
-						<h2>Let's talk about our data science methodology.</h2>
-						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
-					</header>
+						<h2>Let's talk about our results and findings.</h2>
+                        <p>Here is a graph from our analysis:</p>
+					</header>                    
 					<div class="row">
-						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            <p>What did you find out? What are the key takeaways?</p> 
-                            <p>Why should we care about your findings?</p> 
-                            <p>How do your findings fit into what we already know?</p>
+						<div style="text-align: justify;"> <!--class="col-6 col-6-medium col-12-small"-->
+                            <span class="image fit"><img src="images/result.png" alt=""/></span>
+                            <p>The graph shows the peak dates of mis/disinformation tweets about the redtagging of senatoriables. The highest peaks were found to be during the following months: May 2019, June 2020, November 2020, May 2022, and September 2022. The peak from <strong>May 2019</strong> and <strong>May 2022</strong> coincides with the timing of the 2019 and 2022 senatorial elections. To add, months with peaks that are not coinciding with the senatorial elections</p>
+
+                            <p>Due to the non-normal distribution and unequal variance of each group. <strong>Welch's t-test</strong> was performed on the senatorial and non-senatorial groups. The test showed a p-value of <strong>0.0754</strong> which is significant at a 90% confidence interval.</p>
+                                    
+                            <p>Since the p-value is less than alpha (0.10) we can <strong>reject the null hypothesis</strong> with 90% certainty. Hence, it can be concluded that the timing of senatorial elections has <strong>some influence</strong> on the spread of mis/disinformation about senatorial candidates via the frequency of tweets that contain such mis/disinformation about them. These findings accentuate the potential impact of electoral timing on public discourse and the potential manipulation of information during critical political events.</p>
                         </div>
 					</div>
 				</div>
@@ -68,14 +65,15 @@
 			<article id="discussions" class="wrapper style3">
 				<div class="container">
 					<header>
-						<h2>Let's talk about our data science methodology.</h2>
-						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
+						<h2>Let's discuss the relevance of our results.</h2>
 					</header>
 					<div class="row">
-						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            <p>What did you find out? What are the key takeaways?</p> 
-                            <p>Why should we care about your findings?</p> 
-                            <p>How do your findings fit into what we already know?</p>
+						<div style="text-align: justify;"> <!--class="col-6 col-6-medium col-12-small"-->
+                            <p>In summary, the study highlights the existence of peaks in mis/disinformation tweets during specific months, particularly those coinciding with senatorial elections. It further emphasizes the statistical significance of the relationship between electoral timing and the spread of such content on social media platforms.</p>
+
+                            <p>These findings shed light on the importance of monitoring and addressing mis/disinformation during critical political periods to safeguard the integrity of public discourse. By understanding these dynamics, better strategies can be developed to counteract the spread of mis/disinformation.</p>
+
+                            <p>The identification of significant peaks in mis/disinformation tweets during specific months, particularly those aligned with senatorial elections, aligns with existing knowledge about the vulnerability of political events to information manipulation. It supports the idea that political campaigns and elections provide a favorable environment for the spread of inaccurate or deceptive content that can shape public views and affect election results.</p>                             
                         </div>
 					</div>
 				</div>
