@@ -20,9 +20,9 @@
 				<ul class="container">
 					<li><a href="index.html">HOME</a></li>
 					<li><a href="#overview">OVERVIEW</a></li>
-					<li><a href="#feature">FEATURES</a></li>
-					<li><a href="#methods">METHODS</a></li>
-					<li><a href="#results">RESULTS</a></li>
+					<li><a href="#model">MODEL</a></li>
+					<li><a href="#train">TRAINING</a></li>
+					<li><a href="#eval">EVALUATION</a></li>
 					<li><a href="#team">TEAM</a></li>
 				</ul>
 			</nav>
@@ -33,14 +33,15 @@
 					<div class="row aln-left">
 						<div class="col-12-medium">
 							<header>
-								<h1>This is the <strong>features</strong> section.</h1>
+								<h1>This is the <strong>machine learning</strong> section.</h1>
 							</header>
-							<p style="text-align: left;">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
+							<p style="text-align: left;">Featured in this page is the process of modeling the preprocessed data in order to glean insights that will affect our hypothesis.
+							This is used for predictive tasks capturing non-linear relationships, like the time-series data we have gathered.</p>
 							<p style="text-align: left;">Here are the steps tackled in the next sections:</p>
 							<ul style="list-style-type:none; margin-top:-30px; text-align: left;">
-							<li>📌Preprocessing</li>
-							<li>📌Natural Language Processing</li>
-							<li>📌Time Series Analysis</li>
+							<li>📌Machine Learning Model</li>
+							<li>📌Training the Model</li>
+							<li>📌Evaluation Metrics</li>
 							</ul>
 						</div>
 					</div>
@@ -49,16 +50,79 @@
 
 
 
-			<!-- Methods -->
-			<article id="feature" class="wrapper style3">
+			<!-- model -->
+			<article id="model" class="wrapper style3">
 				<div class="container">
 					<header>
-						<h2>Let's talk about our data science methodology.</h2>
-						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
+						<h2>Let's talk about the Event Detection Model.</h2>
+						<p>Since our hypothesis focuses on the relationship of the timing of the elections with the spread of mis/disinformation, the most appropriate machine learning model is the Event Detection Model.</p>
 					</header>
 					<div class="row">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. 
+							<p> The input for the model is the time-series data from the preprocessing stage. This takes in the dates, specifically the binned months and years, of the tweets that contain mis/disinformation.
+								We focused on the Peak Detection algorithm to analyze the time period of the spike of the tweets. Afterwhich, the output would be identifying the trends, especially the peaks that conincide with
+								the senatorial election periods. This was done through visual inspection of the graph.
+							</p>
+                            <p>The Event Detection Model, specifically <b>Peak Detection</b>, plots the date or time against the frequency.
+							The model identifies the significant peaks based on the following parameters: height, width, threshold, distance, and prominence.</p>
+                        </div>
+					</div>
+				</div>
+			</article>
+
+			<!-- train -->
+			<article id="train" class="wrapper style3">
+				<div class="container">
+					<header>
+						<h2>Let's discuss how the model was trained.</h2>
+					</header>
+					<div class="row">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							<p> 
+							</p>
+                            <p>From the time-series input, a line graph is plotted with the years in the x-axis and the frequency of tweetw in the y-axis.
+								Peak detection is applied using the <b>find_peaks function</b>. Since the model uses peak by prominence, the following parameters were used:
+							</p>
+							<pre>
+								<code class="language-python">
+									height=1
+									width=1
+									threshold=1
+									distance=1
+									prominence=5
+								</code>
+								</pre>
+							<p> The machine learning technique was able to produce the following graph:</p>
+							<span class="image fit"><img src="images/result.png" alt=""/></span>
+                        </div>
+					</div>
+				</div>
+			</article>
+
+			<!-- evaluation -->
+			<article id="eval" class="wrapper style3">
+				<div class="container">
+					<header>
+						<h2>Let's evaluate the results.</h2>
+						<p>The evaluation metric for the Event Detection Model is through visual inspection and analyzing the trends with real life events.</p>
+					</header>
+					<div class="row">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							<p style="text-align: left;"> The events of interest are plotted with dashed lines. These signify the duration of the senatorial elections:</p>
+							<ul style="list-style-type:none; margin-top:-30px; text-align: left;">
+								<li>📌2016 national elections: January 10 to June 8</li>
+								<li>📌2019 senatorial elections: January 13 to June 12</li>
+								<li>📌2022 national elections: January 9 to June 8</li>
+							</ul>
+							<p> Through visual inspection of the graph shown in the previous section, we have identified 5 prominent peaks. The <b>highest peak, May 2022</b>, coincides with the duration of the 2022 national elections.
+								It is followed by <b>May 2019</b>, which in turn coincides with the 2019 senatorial elections.
+							</p>
+							<p> The other peaks were found to stem from different issues and news that concerned specific politicians. In June 2020, the spike of mis/disinformation tweets may be attributed to the statement of Senator Risa Hontiveros
+								regarding the guilty charge for Maria Ressa and Reynaldo Santos Jr. As for November 2020, a senate hearing regarding the government's red-tagging practices was held that could have contributed to the spike of the tweets.
+								Lastly, September 2022 was also the date when the Makabayan Bloc opposed the "blind approval" of the Office of the President's (OP) proposed budget for 2023
+							</p>
+							<p> From the analysis of the peaks, we can say that the prominent peaks of mis/disinformation tweets coincide with the timing of the senatorial elections.
+							</p>
                         </div>
 					</div>
 				</div>
