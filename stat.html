@@ -33,14 +33,17 @@
 					<div class="row aln-left">
 						<div class="col-12-medium">
 							<header>
-								<h1>This is the <strong>features</strong> section.</h1>
+								<h1>This is the <strong>statistical analysis</strong> section.</h1>
 							</header>
-							<p style="text-align: left;">Featured in this page are the steps taken by our group to preprocess the data that we have gathered. After reviewing the collected tweets, the team had to clean the dataset and make sure the formatting for each column is consistent. Plots were also used to see the trends in the data. A more detailed look in the process is explained in the next sections below.</p>
+							<p style="text-align: left;">This page features the steps taken by our group to perform statistical analysis to 
+								to verify whether or not we can prove or disprove our hypothesis that the 
+								occurence of the elections is related to the frequency of the fake news tweets about senatoriables. This was done
+								with the following steps.
+							</p>
 							<p style="text-align: left;">Here are the steps tackled in the next sections:</p>
 							<ul style="list-style-type:none; margin-top:-30px; text-align: left;">
-							<li>📌Preprocessing</li>
-							<li>📌Natural Language Processing</li>
-							<li>📌Time Series Analysis</li>
+							<li>📌Test determination</li>
+							<li>📌Findings</li>
 							</ul>
 						</div>
 					</div>
@@ -53,13 +56,209 @@
 			<article id="feature" class="wrapper style3">
 				<div class="container">
 					<header>
-						<h2>Let's talk about our data science methodology.</h2>
-						<p>These are the steps we took to preprocess our dataset for data exploration:</p>
+						<h2>Let's talk about our test determination</h2>
+						<p>These are the steps we took to determine what statistical test we should use.</p>
 					</header>
-					<div class="row">
+					<div class="row aln-left" style="text-align: left;">
 						<div> <!--class="col-6 col-6-medium col-12-small"-->
-                            The first thing we did after loading the dataset is to deal with the null/missing values; we did this by using dropna and removing all the rows in the data set that has an empty ‘Timestamp’ column. Then we reset the index to match the number of rows. This step ensures that no errors in the next parts will occur because of null values. 
+                            In order to determine what t-test we should use, our group first determined whether our independent variable was qualitative
+							or qualitative. For our case, since we are trying to determine what the effect a date being under an election
+							period or not has on the frequency of disinformation, we can say that the independent variable is <strong>qualitative</strong>.
+							For our dependent variable, since we are trying to determine the frequency, the dependent variable is <strong>quantitative</strong>.
                         </div>
+
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							Next, we needed to determine what our distribution and the variance of the data is. 
+							This was done by first grouping our Tweets by whether or not the tweet falls under the election period.
+							The dataframe was edited to add an election_period column, which states whether or not the
+							uploaded tweet falls under the 2016, 2019 or 2022 election periods. This was done with the following code.
+
+							<pre>
+								<code class = "language-python">
+								# Added whether or not the date falls under an election period here
+								# Took the liberty of adjusting the election period to start on the
+								# first day of January
+								election_periods = [
+									{'start_date': '2016-01', 'end_date': '2016-06'},
+									{'start_date': '2019-01', 'end_date': '2019-06'},
+									{'start_date': '2022-01', 'end_date': '2022-06'}
+								]
+
+								# Convert 'date' column to Timestamp
+								df_model['date'] = df_model['date'].dt.to_timestamp()
+
+								# Create the 'election_period' column
+								df_model['election_period'] = False
+
+								# Assign values to the 'election_period' column
+								for period in election_periods:
+									start_date = pd.to_datetime(period['start_date'])
+									end_date = pd.to_datetime(period['end_date'])
+									df_model.loc[(df_model['date'] >= start_date) & (df_model['date'] <= end_date), 'election_period'] = True
+
+								df_model
+								</code>
+							</pre>
+
+							Note that the code was adjusted to start on the first day of January and end on the first day of June to make our code easier.
+							
+							<br> <br>
+							Following this, the dataframe was separated into two dataframes, election_counts, and non_election counts. 
+							These allows us to have a group of tweet frequency for the counts 
+							of the months that fall under the election/non-election period.
+							This is demonstrated in the following code.
+
+							<pre>
+							<code class = "language-python">
+								election_counts = df_model[df_model['election_period'] == True]['count'].values
+								non_election_counts = df_model[df_model['election_period'] == False]['count'].values
+							</code>
+							</pre>
+                        </div>
+						
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							Next, a histogram was constructed to get a visual idea of how the frequencies are distributed. This was done by implementing the following
+							code in matplotlib.
+							<pre>
+							<code class = "language-python">
+								plt.hist(election_counts, bins=10, alpha=0.5, label='Election Counts')
+								plt.hist(non_election_counts, bins=10, alpha=0.5, label='Non Election Counts')
+								plt.legend()
+								plt.xlabel('Frequency')
+								plt.ylabel('Count')
+								plt.title('Distribution of Frequency Values')
+								plt.show()
+							</code>
+							</pre>
+
+							This has the following graph as an output:
+							<img src = "images/distribution.png">
+
+							Upon visual inspection, we can see that the non-election counts are heavily 
+							skewed towards the left, with the election counts also following the same
+							pattern albeit with a lesson height compared to the non-election counts.
+							This gives us an idea that the variance between the two may not be similar
+							as well as both graphs may not be normally distributed. This observation
+							is also proven in the following code.
+
+							<pre>
+								<code class = "language-python">
+									#Shapiro-Wilk Test for Normality
+									from scipy.stats import shapiro
+									
+									# Perform Shapiro-Wilk test
+									_, p_value1 = shapiro(election_counts)
+									_, p_value2 = shapiro(non_election_counts)
+									
+									print("Shapiro-Wilk test results:")
+									print("Group 1 p-value:", p_value1)
+									print("Group 2 p-value:", p_value2)
+									
+									if (p_value1 > 0.05):
+									  print("p_value1 is normally distributed")
+									else:
+									  print("p_value1 is not normally distributed")
+									
+									
+									if (p_value2 > 0.05):
+									  print("p_value2 is normally distributed")
+									else:
+									  print("p_value2 is not normally distributed")
+									
+									# Sums
+									print("Election counts Sum: ", np.sum(election_counts))
+									print("Non-Election counts Sum: ", np.sum(non_election_counts))
+								</code>
+							</pre>
+
+							The previous code checks for the normality and variances of the two graphs.
+							From our graph, we have the following result:
+							
+							<center><img src="images/normality_result.png"></center>
+
+							This shows us that the p-value is less than 0.05 for both groups, which means that
+							both of the graphs are not normally distributed. Their variances were also taken as
+							well, to which election counts has a variance of 11.111 and the non-election group
+							counts have a variance of 3.369. Intuitively we can say that the variances of the
+							two distributions are very far apart, but their significance can also be proven via the following
+							f-test.
+
+							<pre>
+								<code class = "language-python">
+									from scipy.stats import f
+
+									var1 = np.var(election_counts)
+									var2 =  np.var(non_election_counts)
+									
+									# # Variances
+									# print("Election counts Variance: ", var1)
+									# print("Non-Election counts Variance: ", var2)
+									
+									f_stat = var1/var2
+									
+									df1 = len(election_counts) - 1
+									df2 = len(non_election_counts) - 1
+									
+									p_val = 1 - f.cdf(f_stat, df1, df2)
+									
+									if (p_val < 0.05):
+									  print("Significant differences in variances.")
+									else:
+									  print("Not significant difference between variances.")	
+								</code>
+							</pre>
+							The returned p_value of the code is less than 0.05 thus, there is a significant difference between the two variances.
+
+							<br><br>
+							Since the independent variable is qualitative, the dependent variable is qualitative, the
+							distribution of the two groups is non-normal and their variances are significantly different.
+							We chose Welch's t-test as our statistical test to prove or disprove our hypothesis. 
+							Although some research state that Welch's t-test has an assumption that it is normally distributed,
+							the number of samples we have for both groups is high enough to account for this
+							(as shown in the sum of the two groups, n >= 30). The results of Welch's t-test will
+							be explained in the following section.
+                        </div>
+						
+
+
+					</div>
+				</div>
+			</article>
+
+			<article id="feature" class="wrapper style3">
+				<div class="container">
+					<header>
+						<h2>Let's talk about our findings</h2>
+						<p>These are our findings.</p>
+					</header>
+					<div class="row aln-left" style="text-align: left;">
+						<div> <!--class="col-6 col-6-medium col-12-small"-->
+							Welch's t-test assumes the independence of data, a normal distribution and a significant difference in variance
+							between groups. Our data may be non-normal, however as previously mentioned, the data is robust to it due to
+							the large sample size for each group. The implementation of Welch's t-test is done with the following code.
+
+							<pre>
+								<code class = "language-python">
+									import scipy.stats as stats
+									t_statistic, p_value = stats.ttest_ind(election_counts, non_election_counts, equal_var = False)
+									
+									print("Welch's t-test results:")
+									print("t-statistic:", t_statistic)
+									print("p-value:", p_value)
+								</code>
+							</pre>
+
+							The code simply imports the scipy.stats package as stats, and uses a t-test between the two groups and sets the equal_var
+							parameter to false. This allows the method to do all the work for us. This yields the following result.
+
+							<center><img src= "images/welch.png" </center>
+							<br>
+
+							This gives us a t-statistic of 1.876 and a p-value of 0.075. This shows that the frequency of the disinformation tweets about
+							senatoriables is significant to a confidence level of at least 90%. Which implies that the timing of the elections may have
+							<b>some</b> influence on the spread of misinformation/disinformation about senators.
+                        </div>
+
 					</div>
 				</div>
 			</article>
